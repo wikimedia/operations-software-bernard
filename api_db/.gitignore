@@ -1,0 +1,10 @@
+# IntelliJ/Pycharm files
+.idea/*
+
+# Python compiled code stuff
+.pytest_cache
+*.pyc
+venv*/*
+
+# Tox
+.tox

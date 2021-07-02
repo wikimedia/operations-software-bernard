@@ -1,13 +1,11 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+ROUTER = APIRouter()
 
 
-@router.get("/health_check/readiness")
-async def check_readiness():
-    # TODO readiness means that our app is responding to requests and can connect to sql db
-    # Add functionality to perform db connection, and then return error accordingly
+@ROUTER.get("/health_check/liveness")
+async def check_liveness():
     return {
-        "probe": "readiness",
+        "probe": "liveness",
         "status": "ok"
     }

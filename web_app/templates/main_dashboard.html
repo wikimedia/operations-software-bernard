@@ -1,0 +1,113 @@
+{% include "header.html" %}
+   <main class="header-alert" role="main">
+        <div class="container">
+
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Attention required</h4>
+            <p id="header-alert-1" class="mb-0">
+              <span class="badge badge-primary">S4</span>
+              <span class="badge badge-primary">codfw</span>
+              <span class="badge badge-primary">snapshot</span>
+               is in a <span class="badge badge-warning">Warning</span> state (2021-07-02 16:22:43)
+            </p>
+            <p id="header-alert-1" class="mb-0">
+              <span class="badge badge-primary">S4</span>
+              <span class="badge badge-primary">eqiad</span>
+              <span class="badge badge-primary">snapshot</span>
+               is in a <span class="badge badge-danger">RED</span> state (2021-07-02 16:22:43)
+            </p>
+            <hr>
+            <p class="mb-0">Placeholder for any WikiTech Link</p>
+          </div>
+      </div>
+
+      </main>
+
+      <div class="elements py-5 bg-light">
+        <div class="container">
+
+          <div class="row">
+              {% for section in sections %}
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                  <div class="monitorpanel row">
+                    <div class="col text-center font-weight-bold">
+                      <h1 class="display-4">{{ section }}</h1>
+                    </div>
+                  </div>
+                <div class="monitorpanel row">
+                  <div class="col text-center font-weight-bold">
+                    d/c
+                  </div>
+                  <div class="col text-center font-weight-bold">
+                    status
+                  </div>
+                </div>
+                {%  for datacenter in datacenters %}
+                <section class="monitorpanel row">
+                  <div class="monitorsection col text-center bg-light" id="s1-eqiad">
+                      {{ datacenter }}
+                  </div>
+
+                      {% set investigate_count = namespace(value=0) %}
+                      {% for result in results %}
+                          {%  if (result['section'] == section and result['datacenter'] == datacenter and result['freshness'] == "fail") %}
+
+                              {%  set investigate_count.value = investigate_count.value + 1 %}
+                          {% endif %}
+                      {% endfor %}
+                      {%  if investigate_count.value > 0 %}
+                        {% set status = "Investigate" %}
+                      {%  else %}
+                        {% set status = "OK" %}
+                      {%  endif %}
+
+                    {%  if investigate_count.value > 0 %}
+                        <div class="monitorstatus col text-center bg-danger text-white">
+                            {{ status }} [ {{ investigate_count.value }} ]
+                        </div>
+                    {% else %}
+                        <div class="monitorstatus col text-center bg-success text-white">
+                            {{ status }} [ {{ investigate_count.value }} ]
+                        </div>
+                    {% endif %}
+                </section>
+                {% endfor %}
+
+              </div>
+                <div class="card-body">
+                 <!-- <p class="card-text alert alert-info">S1 - codfw is in OK state as last backup was taken at 2021-07-02 10:11:12.</p>
+                  <p class="card-text alert alert-danger">S1 - eqiad is in OK state as last backup was taken at 2021-07-02 10:11:12.</p>
+                 -->
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" data-toggle="collapse" href="#collapseInfo-{{ section }}" class="btn btn-sm btn-outline-secondary">more info!</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">refresh</button>
+                    </div>
+
+
+                  </div>
+                    <div class="collapse" id="collapseInfo-{{ section }}">
+                    {% for result in results %}
+                           {%  if (result['section'] == section and result['datacenter'] == "codfw") %}
+                               <div class="col-md-12 bs-linebreak"></div>
+                               <h4>codfw-{{ result['type'] }}-freshness</h4>
+                               <small class="text-muted">Last successful {{  result['type'] }} taken on <b>{{ result['last_backed_up'] }}</b> from codfw and this was {{  result['ago'] }} ago</small>
+                               {% elif (result['section'] == section and result['datacenter'] == "eqiad") %}
+                               <h4>eqiad-{{ result['type']  }}-freshness:</h4>
+                               <div class="col-md-12 bs-linebreak"></div>
+                               <small class="text-muted">Last successful {{  result['type'] }} taken on <b>{{ result['last_backed_up'] }}</b> from eqiad and this was {{  result['ago'] }} ago</small>
+
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+              {% include "footer.html" %}

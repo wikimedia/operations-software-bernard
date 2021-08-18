@@ -47,6 +47,7 @@ def test_config_contains_correct_parameters():
     error = False
     try:
         test_config = app_config.get_settings()
+        print(test_config)
     except ConfigException:
         error = True
 
@@ -77,8 +78,3 @@ def test_config_loader_loads_hosts_config_correctly():
             assert configs[config] == DBBACKUPS_PROFILE_TEST_DATA
         else:
             raise Exception('Either freshness or backup profile were missing from configs')
-
-
-
-
-

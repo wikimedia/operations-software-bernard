@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 def create_app() -> FastAPI:
     app = FastAPI(title="DBBackupsDashboard Bernard WebApp")
     app.include_router(apex.router)
-    app.mount("/static", StaticFiles(directory="../static"), name="static")
+    app.mount("/static", StaticFiles(directory="web_app/static"), name="static")
     return app
 
 

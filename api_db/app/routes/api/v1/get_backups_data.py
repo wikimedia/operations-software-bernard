@@ -6,11 +6,6 @@ from datetime import datetime
 router = APIRouter()
 
 
-@router.get("/api/v1/get_recent_backups_data")
-async def get_recent_backups_data():
-    return await crud.get_recent_backups()
-
-
 @router.get("/api/v1/backups/recent/all")
 async def get_recent_backups_data():
     return await crud.get_recent_backups()
@@ -130,5 +125,3 @@ async def check_all_backup_freshness():
                             "ago": time_delta_string})
 
     return results
-
-

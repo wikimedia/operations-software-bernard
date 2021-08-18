@@ -39,10 +39,10 @@ class DevConfig(GlobalConfig):
 
 
 class TestConfig(GlobalConfig):
-    """Test configurations."""
+    """Test configuration for Jenkins CI only."""
 
-    DB_URI: Optional[str] = "sqlite:///test.db"
-    ALERTING_HOST_FILE = "../app/config/test_alerting_config.yaml"
+    DB_URI: Optional[str] = "sqlite:///api_db/tests/test.db"
+    ALERTING_HOST_FILE = "api_db/app/config/test_alerting_config.yaml"
 
     class Config:
         env_prefix: str = "TEST_"

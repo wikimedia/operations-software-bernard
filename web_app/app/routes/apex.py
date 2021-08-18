@@ -14,7 +14,7 @@ async def show_dashboard(request: Request):
     sections_api_url = global_config.SECTIONS_API_ENDPOINT
     datacenters_api_url = global_config.DATACENTERS_API_ENDPOINT
     freshness_check_api_url = global_config.FRESHNESS_CHECK_API_ENDPOINT
-    sections, types, datacenters, freshness_results, recent_backups = [], [], [], [], []
+    sections, types, datacenters, freshness_results = [], [], [], []
 
     # API calls to our endpoints
     freshness_results = await make_api_call(freshness_check_api_url)

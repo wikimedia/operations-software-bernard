@@ -5,7 +5,7 @@ from tests.test_data.freshness_check_response import FRESHNESS_CHECK_RESPONSE, F
 
 
 def test_get_recent_apps(test_app):
-    response = test_app.get("/api/v1/get_recent_backups_data")
+    response = test_app.get("/api/v1/backups/recent/all")
     response_json = json.loads(response.text)
     assert response.status_code == 200
     assert response_json == RECENT_BACKUPS_EXPECTED_RESPONSE

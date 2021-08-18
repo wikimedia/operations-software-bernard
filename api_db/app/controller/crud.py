@@ -35,16 +35,16 @@ async def get_recent_backups():
                     final_res.append(res)
     return final_res
 
+
 async def get_backup_data_by_section(section):
     pass
-
 
 
 async def readiness_check():
     # Our definition of readiness is that it is able to query the database and get some rows of data
     query = """
-               SELECT id, name, status, source, host, type, section, start_date, end_date, total_size 
-               FROM backups b 
+               SELECT id, name, status, source, host, type, section, start_date, end_date, total_size
+               FROM backups b
                WHERE b.start_date = (
                    SELECT MAX(start_date)
                    FROM backups b2

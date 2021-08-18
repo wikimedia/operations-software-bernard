@@ -45,8 +45,8 @@ def test_config_contains_correct_parameters():
     error = False
     try:
         test_config = app_config.get_settings()
+        print(test_config)
     except ConfigException:
         error = True
 
     assert not error
-

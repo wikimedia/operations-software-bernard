@@ -1,3 +1,133 @@
 {% include "header.html" %}
-<!-- TODO >
+ <div class="elements py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+                {% for datacenter in datacenters %}
+              <div class="card mb-12 shadow-sm">
+                <div class="card-body">
+                  <div class="monitorpanel row">
+                    <div class="col text-center font-weight-bold">
+                      <h1 class="display-4">{{ section }} - {{  datacenter }}</h1>
+                    </div>
+                  </div>
+                <div class="monitorpanel row">
+                  <div class="col text-center font-weight-bold">
+                    type
+                  </div>
+                  <div class="col text-center font-weight-bold">
+                    status
+                  </div>
+                  <div class="col text-center font-weight-bold">
+                    last success
+                  </div>
+
+                  <div class="col text-center font-weight-bold">
+                    taken by
+                  </div>
+                </div>
+                  {%  for type in types %}
+                <section class="monitorpanel row">
+                  <div class="monitorsection col text-center bg-light" id="{{ section }}-eqiad">
+                      {{ type }}
+                  </div>
+
+                      {% set investigate_count = namespace(value=0) %}
+                      {% for result in section_result %}
+                          {%  if (result['section'] == section and result['type'] == type and result['freshness'] == "fail") %}
+
+                              {%  set investigate_count.value = investigate_count.value + 1 %}
+
+                          {% endif %}
+                      {% endfor %}
+                      {%  if investigate_count.value > 0 %}
+                        {% set status = "Investigate" %}
+                      {%  else %}
+                        {% set status = "No alerts" %}
+                      {%  endif %}
+
+                    {%  if investigate_count.value > 0 %}
+                        <div class="monitorstatus col text-center bg-danger text-white">
+                            {{ status }}
+                        </div>
+                    {% else %}
+                        <div class="monitorstatus col text-center bg-success text-white">
+                            {{ status }}
+                        </div>
+                    {% endif %}
+                    <div class="monitorstatus col text-center bg-light text-black">
+                    {% for result in section_result %}
+                          {%  if (result['section'] == section and result['type'] == type and result['datacenter'] == datacenter) %}
+
+                              {{ result['last_backed_up'] }}
+
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+                  <div class="monitorstatus col text-center bg-light text-black">
+                      {% for result in section_result %}
+                          {%  if (result['section'] == section and result['type'] == type and result['datacenter'] == datacenter) %}
+
+                              {{ result['taken_by'] }}
+
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+                </section>
+                {% endfor %}
+
+              </div>
+
+
+
+                  <br>
+                  <div class="alert alert-primary" role="alert">Last updated {{ system_time }}</div>
+                {% endfor %}
+                  <div class="col text-center font-weight-bold">
+                    <h3 class="display-6">Recent Failures</h3>
+                  </div>
+                    {% for result in section_result %}
+                          {%  if (result['section'] == type and result['type'] == type and result['datacenter'] == datacenter) %}
+                              There are no errors in the past 7 days
+                          {% endif %}
+                      {% endfor %}
+                  <div class="col text-center font-weight-bold">
+                    <h3 class="display-6">Attention</h3>
+                  </div>
+                {% for result in section_result %}
+                          {%  if (result['section'] == section and result['type'] == "snapshot" and result['freshness'] == "fail") %}
+
+                               <div class="alert alert-danger" role="alert">
+                                <button type="button" class="btn btn-primary">snapshot</button>
+                                    <button type="button" class="btn btn-primary">{{ result['datacenter'] }}</button>
+                                     <button type="button" class="btn btn-primary">freshness</button>
+                                   <br> <br>
+                                 Since {{ result ['last_backed_up'] }},
+                                   there has not been a single successful backup on dump for {{ result['datacenter'] }}</small>
+                                <br>
+                                Last successful backup was {{ result ['ago'] }}
+                                </div>
+
+                          {% endif %}
+                      {% endfor %}
+
+                 {% for result in section_result %}
+                          {%  if (result['section'] == section and result['type'] == "dump" and result['freshness'] == "fail") %}
+
+                               <div class="alert alert-danger" role="alert">
+                                <button type="button" class="btn btn-primary">dump</button>
+                                   <button type="button" class="btn btn-primary">{{ result['datacenter'] }}</button>
+                                   <button type="button" class="btn btn-primary">freshness</button>
+                                    <br> <br>
+                                Since {{ result ['last_backed_up'] }},
+                                   there has not been a single successful backup on dump for {{ result['datacenter'] }}</small>
+                                <br>
+                                Last successful backup was {{ result ['ago'] }}
+                                </div>
+
+                          {% endif %}
+                      {% endfor %}
+
+              </div>
+            </div>
 {% include "footer.html" %}

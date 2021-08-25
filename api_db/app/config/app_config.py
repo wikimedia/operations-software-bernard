@@ -32,7 +32,7 @@ class DevConfig(GlobalConfig):
     """Development configurations."""
 
     DB_URI: Optional[str] = Field(None, env="DB_URI")
-    ALERTING_HOST_FILE: Optional[str] = "config/alerting_host.yaml"
+    ALERTING_HOST_FILE: Optional[str] = "app/config/alerting_host.yaml"
 
     class Config:
         env_prefix: str = "DEV_"
@@ -50,6 +50,8 @@ class TestConfig(GlobalConfig):
 
 class ProdConfig(GlobalConfig):
     """Production configurations."""
+    DB_URI: Optional[str] = Field(None, env="DB_URI")
+    ALERTING_HOST_FILE: Optional[str] = Field(None, env="ALERTING_HOST_FILE")
 
     class Config:
         env_prefix: str = "PROD_"

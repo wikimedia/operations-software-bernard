@@ -2,7 +2,7 @@
 FROM python:3.7.6-alpine
 
 # set work directory
-WORKDIR /usr/api_db
+WORKDIR /usr/web_app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1

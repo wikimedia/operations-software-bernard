@@ -90,6 +90,7 @@ async def check_all_backup_freshness():
         # An assumption is made on datacenter format
         datacenter = backup['source'].split('.')[1]
         end_date = backup['end_date']
+        backup_taken_by = backup['host']
         if type(end_date) != str:
             end_date_string = end_date.strftime('%Y-%m-%dT%H:%M:%S')
         else:
@@ -115,13 +116,16 @@ async def check_all_backup_freshness():
                             "type": backup_type,
                             "datacenter": datacenter,
                             "last_backed_up": end_date_string,
-                            "ago": time_delta_string})
+                            "ago": time_delta_string,
+                            "taken_by": backup_taken_by})
         else:
             results.append({"section": section,
                             "freshness": "ok",
                             "type": backup_type,
                             "datacenter": datacenter,
                             "last_backed_up": end_date_string,
-                            "ago": time_delta_string})
+                            "ago": time_delta_string,
+                            "taken_by": backup_taken_by
+                            })
 
     return results

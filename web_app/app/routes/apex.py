@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from app.config import app_config
 
 router = APIRouter()
-templates = Jinja2Templates(directory="../templates")
+templates = Jinja2Templates(directory="/templates")
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -20,6 +20,7 @@ async def show_dashboard(request: Request):
     freshness_results = await make_api_call(freshness_check_api_url)
     datacenters = await make_api_call(datacenters_api_url)
     sections = await make_api_call(sections_api_url)
+    types = ["snapshot", "dump"]
 
     return templates.TemplateResponse("main_dashboard.html",
                                       {"request": request,

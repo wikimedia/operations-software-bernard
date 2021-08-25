@@ -2,23 +2,28 @@
    <main class="header-alert" role="main">
         <div class="container">
 
-          <div class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">Attention required</h4>
-            <p id="header-alert-1" class="mb-0">
-              <span class="badge badge-primary">S4</span>
-              <span class="badge badge-primary">codfw</span>
-              <span class="badge badge-primary">snapshot</span>
-               is in a <span class="badge badge-warning">Warning</span> state (2021-07-02 16:22:43)
-            </p>
-            <p id="header-alert-1" class="mb-0">
-              <span class="badge badge-primary">S4</span>
-              <span class="badge badge-primary">eqiad</span>
-              <span class="badge badge-primary">snapshot</span>
-               is in a <span class="badge badge-danger">RED</span> state (2021-07-02 16:22:43)
-            </p>
-            <hr>
-            <p class="mb-0">Placeholder for any WikiTech Link</p>
-          </div>
+                        <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">Status</h4>
+                             {% for result in results %}
+                                 {%  if result['freshness'] == "fail" %}
+                                    <p id="header-alert-1" class="mb-0">
+                                      <span class="badge badge-primary">{{ result['section'] }}</span>
+                                      <span class="badge badge-primary">{{ result['datacenter'] }}</span>
+                                      <span class="badge badge-primary">{{ result['type'] }}</span>
+                                        <span class="badge badge-danger">Red</span>
+                                        Freshness check is in
+                                        a {{  result['freshness'] }} state as last successful backup was at {{ result['last_backed_up'] }},
+                                        which is {{  result['ago'] }}.
+                                        <a href="/sections/{{ result['section'] }}">Additional details for {{ result['section'] }} </a>
+                                     </p>
+                                      <hr>
+
+                                  {% endif %}
+                            {% endfor %}
+                        <hr>
+                      </div>
+
+
       </div>
 
       </main>
@@ -44,28 +49,29 @@
                     status
                   </div>
                 </div>
-                {%  for datacenter in datacenters %}
+                {%  for type in types %}
                 <section class="monitorpanel row">
-                  <div class="monitorsection col text-center bg-light" id="s1-eqiad">
-                      {{ datacenter }}
+                  <div class="monitorsection col text-center bg-light" id="{{ section }}-eqiad">
+                      {{ type }}
                   </div>
 
                       {% set investigate_count = namespace(value=0) %}
                       {% for result in results %}
-                          {%  if (result['section'] == section and result['datacenter'] == datacenter and result['freshness'] == "fail") %}
+                          {%  if (result['section'] == section and result['type'] == type and result['freshness'] == "fail") %}
 
                               {%  set investigate_count.value = investigate_count.value + 1 %}
+
                           {% endif %}
                       {% endfor %}
                       {%  if investigate_count.value > 0 %}
                         {% set status = "Investigate" %}
                       {%  else %}
-                        {% set status = "OK" %}
+                        {% set status = "No alerts" %}
                       {%  endif %}
 
                     {%  if investigate_count.value > 0 %}
                         <div class="monitorstatus col text-center bg-danger text-white">
-                            {{ status }} [ {{ investigate_count.value }} ]
+                            {{ status }} [ <a href="sections/{{ section }}">{{ investigate_count.value }}</a> ]
                         </div>
                     {% else %}
                         <div class="monitorstatus col text-center bg-success text-white">

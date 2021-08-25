@@ -7,6 +7,7 @@ import pytest
 @pytest.fixture(scope="module")
 def test_app():
     os.environ["ENV"] = "test"
+    os.environ["API_URL"] = "https://test.url"
     from starlette.testclient import TestClient
     from app import main
 

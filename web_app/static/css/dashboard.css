@@ -1,11 +1,8 @@
-.monitorsection {
-    padding: 5%;
-}
-
+.monitorsection,
 .monitorstatus {
     padding: 5%;
-
 }
+
 
 .monitorpanel {
     padding: 1%;
